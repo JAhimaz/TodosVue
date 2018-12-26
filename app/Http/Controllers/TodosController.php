@@ -4,38 +4,35 @@ namespace App\Http\Controllers;
 
 use App\Todo;
 use Illuminate\Http\Request;
+use App\Services\TodoService;
 
 class TodosController extends Controller{
 
+  private $todosService;
 
+  public function __construct(TodoService $todosService)
+  {
+    $this->todosService = $todosService;
+  }
 
 	/**
    * Display a listing of the resource.
    *
    * @return \Illuminate\Http\Response
    */
-  public function index(){
-    $todos = Todo::all();
+   public function index(Request $request){
+     if ($request->wantsJson()){
+       //If it requires Json run it through the service.
+       return $this->todosService->all();
+     }
 
-		return view('todos.index', ['todos' => $todos]);
-  }
+     return view('todos.index');
+   }
 
-
-  /**
-   * Show the form for creating a new resource.
-   *
-   * @return \Illuminate\Http\Response
-   */
   public function create(){
     return view('todos.create');
   }
 
-  /**
-   * Store a newly created resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @return \Illuminate\Http\Response
-   */
   public function store(Request $request){
 		$data = $request->validate([
       'title' => 'required|string|max:15',
@@ -43,7 +40,7 @@ class TodosController extends Controller{
 
 		Todo::create($data);
 
-		return redirect()->route('todos.index');
+    return response()->json('Stored');
   }
 
   /**
@@ -52,19 +49,20 @@ class TodosController extends Controller{
    * @param  \App\Todo  $todo
    * @return \Illuminate\Http\Response
    */
-  public function show(Todo $todo)
-  {
-      //
+  public function complete(Request $request, Todo $todo){
+
+    $data = $request->validate([
+      'completed' => 'required'
+    ]);
+
+    $todo->completed = $data['completed'];
+    $todo->save();
+
+    return response()->json('Completed');
   }
 
-  /**
-   * Show the form for editing the specified resource.
-   *
-   * @param  \App\Todo  $todo
-   * @return \Illuminate\Http\Response
-   */
   public function edit(Todo $todo){
-    return view('todos.edit', ['todo' => $todo]);
+
   }
 
   /**
@@ -75,6 +73,7 @@ class TodosController extends Controller{
    * @return \Illuminate\Http\Response
    */
   public function update(Request $request, Todo $todo){
+
 		$data = $request->validate([
       'title' => 'required|string|max:15',
     ]);
@@ -82,7 +81,7 @@ class TodosController extends Controller{
 		$todo->title = $data['title'];
 		$todo->save();
 
-		return redirect()->route('todos.index');
+		return response()->json('Updated');
   }
 
   /**
@@ -93,7 +92,7 @@ class TodosController extends Controller{
    */
   public function destroy(Todo $todo){
     $todo->delete();
-		
-		return redirect()->route('todos.index');
+
+		return response()->json('deleted');
   }
 }

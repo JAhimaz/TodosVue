@@ -1,23 +1,44 @@
 @extends('layouts.master')
 
+<style>
+.todos-title{
+	text-align: center;
+	margin-bottom: 2rem;
+	font-size: 7rem;
+	font-weight: 100;
+}
+
+.todos-wrapper{
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+	background: #fff;
+}
+
+.todos-list{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+.todos-list-item{
+		background: transparent;
+		word-break: break-all;
+		margin: 0;
+		padding: 15px 60px 15px 15px;
+		display: block;
+		line-height: 1.2;
+		transition: color 0.4s;
+		font-size: 30px;
+		font-weight: 300;
+		.todos-list-item-link{
+			color: #343a40;
+			text-decoration: none !important;
+		}
+	}
+}
+
+</style>
+
 @section('master')
-	<div class="row">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-6 mx-auto">
-					<h1 class="todos-title">Todos</h1>
-					<a href="{{ route('todos.create') }}" class="btn btn-primary mb-3 ml-auto">Create new todos</a>
-					<div class="todos-wrapper">
-						<ul class="list-group todos-list">
-							@foreach ($todos as $todo)
-								<li class="list-group-item todos-list-item">
-									<a href="{{ route('todos.edit', $todo->id) }}" class="todos-list-item-link">{{ $todo->title }}</a>
-								</li>
-							@endforeach
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
+	<div class="container col-md-4 col-md-offset-4" id="app">
+		<todos></todos>
 	</div>
+
 @endsection

@@ -13943,7 +13943,7 @@ window.Vue = __webpack_require__(36);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', __webpack_require__(39));
+Vue.component('Todos', __webpack_require__(39));
 
 var app = new Vue({
   el: '#app'
@@ -47246,7 +47246,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/ExampleComponent.vue"
+Component.options.__file = "resources/assets/js/components/TodosComponent.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -47255,9 +47255,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7168fb6a", Component.options)
+    hotAPI.createRecord("data-v-852556f2", Component.options)
   } else {
-    hotAPI.reload("data-v-7168fb6a", Component.options)
+    hotAPI.reload("data-v-852556f2", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -47398,11 +47398,96 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mounted: function mounted() {
-        console.log('Component mounted.');
-    }
+				data: function data() {
+								return {
+												todos: [],
+												todo: {
+																id: '',
+																title: '',
+																completed: ''
+												},
+												edit: false
+								};
+				},
+				created: function created() {
+								this.fetchTodos();
+				},
+
+
+				methods: {
+								fetchTodos: function fetchTodos() {
+												var _this = this;
+
+												axios.get('/todos').then(function (res) {
+																_this.todos = res.data;
+												});
+								},
+								addTodo: function addTodo() {
+												var _this2 = this;
+
+												if (this.edit === false) {
+																//Add
+																axios.post('/todos', this.todo).then(function (res) {
+																				_this2.todo.title = '';
+																				_this2.edit = false;
+																				_this2.fetchTodos();
+																}).catch(function (err) {
+																				return console.error(err);
+																});
+												} else {
+																axios.put('/todos/' + this.todo.id, {
+																				title: this.todo.title
+																}).then(function (res) {
+																				_this2.todo.title = '';
+																				_this2.edit = false;
+																				_this2.fetchTodos();
+																}).catch(function (err) {
+																				return console.error(err);
+																});
+												}
+								},
+								deleteTodo: function deleteTodo(id) {
+												var _this3 = this;
+
+												axios.delete('/todos/' + id).then(function (response) {
+																_this3.fetchTodos();
+												}).catch(function (err) {
+																return console.error(err);
+												});
+								},
+								editTodo: function editTodo(todo) {
+												if (todo.completed) {
+																alert('You Have Already Completed this To Do.');
+												} else {
+																this.edit = true;
+																this.todo.id = todo.id;
+																this.todo.title = todo.title;
+																this.todo.completed = todo.completed;
+												}
+								},
+								completeTodo: function completeTodo(todo) {
+												var _this4 = this;
+
+												axios.put('/todos/' + todo.id + '/complete', {
+																completed: !todo.completed
+												}).then(function (res) {
+																_this4.fetchTodos();
+												}).catch(function (err) {
+																return console.error(err);
+												});
+								}
+				}
 });
 
 /***/ }),
@@ -47413,29 +47498,120 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "row" }, [
+    _c("h1", { staticClass: "todos-title" }, [_vm._v("Todos")]),
+    _vm._v(" "),
+    _c(
+      "form",
+      {
+        attrs: { action: "#" },
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            _vm.addTodo()
+          }
+        }
+      },
+      [
+        _c("div", { staticClass: "input-group" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.todo.title,
+                expression: "todo.title"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "text", name: "title", autofocus: "" },
+            domProps: { value: _vm.todo.title },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.todo, "title", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _vm._m(0)
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "todos-wrapper" }, [
+      _c(
+        "ul",
+        { staticClass: "list-group todos-list" },
+        _vm._l(_vm.todos, function(todo, index) {
+          return _c("li", { staticClass: "list-group-item" }, [
+            todo.completed
+              ? _c("a", {}, [
+                  _vm._v(_vm._s(todo.title)),
+                  todo.completed ? _c("a", [_vm._v(" ✔ COMPLETED")]) : _vm._e()
+                ])
+              : _c(
+                  "a",
+                  {
+                    attrs: { href: "" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.editTodo(todo)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(todo.title))]
+                ),
+            _vm._v(" "),
+            _c(
+              "p",
+              {
+                staticClass: "btn btn-danger btn-xs pull-right",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.deleteTodo(todo.id)
+                  }
+                }
+              },
+              [_vm._v("✖")]
+            ),
+            _vm._v(" "),
+            !todo.completed
+              ? _c(
+                  "p",
+                  {
+                    staticClass: "btn btn-info btn-xs pull-right",
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.completeTodo(todo)
+                      }
+                    }
+                  },
+                  [_vm._v("✔")]
+                )
+              : _vm._e()
+          ])
+        })
+      )
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card card-default" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("Example Component")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v(
-                "\n                    I'm an example component.\n                "
-              )
-            ])
-          ])
-        ])
-      ])
+    return _c("span", { staticClass: "input-group-btn" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [_vm._v("New Todo")]
+      )
     ])
   }
 ]
@@ -47444,7 +47620,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-7168fb6a", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-852556f2", module.exports)
   }
 }
 
