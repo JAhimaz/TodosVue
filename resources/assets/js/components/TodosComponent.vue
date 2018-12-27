@@ -5,7 +5,7 @@
             <div class="input-group">
                 <input v-model="todo.title" type="text" name="title" class="form-control" autofocus>
                 <span class="input-group-btn">
-                    <button type="submit" class="btn btn-primary">New Todo</button>
+                    <button type="submit" class="btn btn-primary">submit &#8594;</button>
                 </span>
             </div>
         </form>

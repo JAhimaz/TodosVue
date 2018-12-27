@@ -1,5 +1,6 @@
 @extends('layouts.master')
 
+
 <style>
 .todos-title{
 	text-align: center;
