@@ -17,3 +17,9 @@ if (!function_exists('no_content')){
     return respond($message, $status_code);
   }
 }
+
+if (!function_exists('current_user')){
+  function current_user(){
+    return Auth::user();
+  }
+}

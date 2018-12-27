@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class TodoService extends TransformerService{
 
   public function all(){
-    $todos = Todo::all();
+    $todos = Todo::where('user_id', current_user()->id)->get();
 
     return respond($this->transformCollection($todos));
   }
@@ -26,7 +26,10 @@ class TodoService extends TransformerService{
       'title' => 'required|string|max:15',
     ]);
 
-		Todo::create($data);
+		Todo::create([
+      'title' => $data['title'],
+      'user_id' => current_user()->id
+    ]);
 
     return response()->json('Stored');
   }
