@@ -25,6 +25,8 @@
       </div>
       <button type="submit" class="btn btn-primary">Login</button>
     {!! Form::close() !!}
+    <br />
+    <a class="btn btn-info btn-lg" href="{{route('signup.show')}}" role="button">Sign Up</a>
     </row>
   </div>
 </div>
