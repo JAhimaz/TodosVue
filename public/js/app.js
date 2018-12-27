@@ -47610,7 +47610,7 @@ var staticRenderFns = [
       _c(
         "button",
         { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-        [_vm._v("New Todo")]
+        [_vm._v("submit →")]
       )
     ])
   }
