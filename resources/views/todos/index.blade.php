@@ -40,6 +40,7 @@
 @section('master')
 	<div class="container col-md-4 col-md-offset-4" id="app">
 		<todos></todos>
+		<a class="btn btn-danger btn-lg btn-block" href="{{route('logout')}}" role="button">Log Out</a>
 	</div>
 
 @endsection

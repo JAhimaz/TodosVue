@@ -8,7 +8,7 @@ use Auth;
 
 class AuthController extends Controller
 {
-
+  //--------------------------------------
   //Login Functions
   public function showLogin(){
     return view("auth.login");
@@ -28,7 +28,7 @@ class AuthController extends Controller
       return redirect()->back()->withErrors(['message' => 'Incorrect Email or Password']);
     }
   }
-
+  //--------------------------------------
   //Signup Functions
   public function showSignup(){
     return view("auth.signup");
@@ -45,6 +45,12 @@ class AuthController extends Controller
 
     Auth::login($user);
     return redirect()->route('todos.index');
+  }
+  //--------------------------------------
+  //Logout Function
+  public function logout(){
+    Auth::logout();
+    return redirect()->route('login.show');
   }
 
 }
