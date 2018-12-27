@@ -21,6 +21,9 @@ Route::middleware('auth')->group(function(){
   Route::put('todos/{todo}', 'TodosController@update')->name('todos.update');
   Route::put('todos/{todo}/complete', 'TodosController@complete')->name('todos.complete');
   Route::delete('todos/{todo}', 'TodosController@destroy')->name('todos.delete');
+
+  //Logout
+  Route::get('logout', 'AuthController@logout')->name('logout');
 });
 
 //Unavailable if logged in
@@ -39,7 +42,7 @@ Route::middleware('guest')->group(function(){
 /*
 | ---------- Login (1) ------------
 | 1. Create a route (GET) to the login page
-| 2. Create a controller to handle authentication requests (AuthenticationController)
+| 2. Create a function to handle authentication requests (AuthenticationController)
 | 3. First request the view that has a login form (Using Blade) to display to the users.
 | 4. Submit create a login route (POST) for the login information.
 | 4.1 Validate the user data (Never trust the user)
@@ -48,11 +51,21 @@ Route::middleware('guest')->group(function(){
 |       Redirect to the todo page
 | ----> else
 |       Redirect to the login page to reattempt
+|
 | ---------- Sign Up (2) ------------
 | 1. Create a route (GET) to the Sign up Page
-| 2. Create a controller to handle signup requests (AuthenticationController)
+| 2. Create a function to handle signup requests (AuthenticationController)
 | 3. Return the sign up form (Blade)
 | 4. Validate the user inputed information before storing
 | 5. Store the data (Hash the password using bcrypt) (if validated correctly) and redirect to todos
+|
 | ---------- Middleware (3) ------------
+| 1. Wrap the routes
+| 2. Make function that depends whether the user is logged in to view
+|
+| ---------- Logging out (4) ------------
+| 1. Create a route (GET) to logout
+| 2. Create a function to handle logout request (AuthenticationController)
+| 3. Create a button to log the user out
+| 4. Redirect the user to the login page
 */

@@ -14,10 +14,8 @@
             <li class="list-group-item" v-for="(todo, index) in todos">
 								<a v-if="todo.completed" class="">{{ todo.title }}<a v-if="todo.completed"> &#10004; COMPLETED</a></a>
 								<a v-else href= "" @click.prevent="editTodo(todo)">{{ todo.title }}</a>
-
 								<p @click.prevent="deleteTodo(todo.id)" class="btn btn-danger btn-xs pull-right">&#10006;</p> <!-- Delete Button -->
 								<p v-if="!todo.completed" @click.prevent="completeTodo(todo)" class="btn btn-info btn-xs pull-right">&#10004;</p> <!-- Complete Button -->
-
 						</li>
         </ul>
 				</div>
